@@ -8,7 +8,7 @@ import dev.jcasaslopez.classroom.entity.Classroom;
 @Component
 public class ClassroomMapper {
 	
-	Classroom classroomDtoToClassroom (ClassroomDto classroom) {
+	public Classroom classroomDtoToClassroom (ClassroomDto classroom) {
 		return new Classroom(classroom.getIdClassroom(),
 							classroom.getName(),
 							classroom.getSeats(),
@@ -16,7 +16,7 @@ public class ClassroomMapper {
 							classroom.isSpeakers());
 	}
 	
-	ClassroomDto classroomToClassroomDto (Classroom classroom) {
+	public ClassroomDto classroomToClassroomDto (Classroom classroom) {
 		return new ClassroomDto(classroom.getIdClassroom(),
 							classroom.getName(),
 							classroom.getSeats(),
