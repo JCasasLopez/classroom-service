@@ -64,9 +64,9 @@ public class ClassroomServiceImpl implements ClassroomService {
 	@Override
 	public boolean isUserAdmin(String username, String[] roles) {
 		
-		/* Un filtro captura el token JWT usado para la autenticación de los usuarios a partir del 
-		   encabezado de la petición HTTP, extrae sus "claims" y al llamar a este método, manda el 
-		   array con los roles como parámetro.
+		/* Un filtro captura el token JWT desde el encabezado de la petición HTTP y lo envía al 
+   		   microservicio "users" para su validación. El microservicio "users" verifica la 
+   		   autenticidad del token, y devuelve el username y los roles asociados. 
 
 		   Por defecto, cuando se crea un nuevo usuario, se le asigna automáticamente el rol "user";
 		   si después se promociona a ese usuario a "admin", ambos roles se mantienen en su atributo
@@ -75,9 +75,9 @@ public class ClassroomServiceImpl implements ClassroomService {
 
 		   ---------------------------------------------------------------------------------------
 
-		   A filter captures the token JWT used for authentication from the HTTP request header,
-		   extracts its claims and sends the roles in the form of an array as a parameter when 
-		   calling this method.
+		   A filter captures the JWT token from the HTTP request header and sends it to the "users" 
+		   microservice for validation. The "users" microservice verifies the authenticity of the token, 
+		   and returns the username and associated roles
 
 		   By default, a new user is assigned the role "user" when first created; if later 
 		   the user is upgraded to "admin", both roles are kept, hence if the array's length is 
