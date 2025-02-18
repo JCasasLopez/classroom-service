@@ -7,6 +7,5 @@ public interface ClassroomService {
 	ClassroomDto createClassroom(ClassroomDto classroom);
 	void deleteClassroom(int idClassroom);
 	ClassroomDto updateClassroom(ClassroomDto classroom);
-	boolean isUserAdmin(String username, String[] roles);
 	
 }
