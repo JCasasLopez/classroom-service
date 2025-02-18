@@ -2,8 +2,10 @@ package dev.jcasaslopez.classroom.service;
 
 import java.util.Optional;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
 import dev.jcasaslopez.classroom.dto.ClassroomDto;
 import dev.jcasaslopez.classroom.entity.Classroom;
 import dev.jcasaslopez.classroom.exception.NoSuchClassroomException;
@@ -12,6 +14,8 @@ import dev.jcasaslopez.classroom.repository.ClassroomRepository;
 
 @Service
 public class ClassroomServiceImpl implements ClassroomService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(ClassroomServiceImpl.class);
 	
 	private final ClassroomRepository classroomRepository;
 	private final ClassroomMapper classroomMapper;
