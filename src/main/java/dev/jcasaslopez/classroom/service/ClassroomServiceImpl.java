@@ -36,15 +36,15 @@ public class ClassroomServiceImpl implements ClassroomService {
 	}
 
 	@Override
-	public void removeClassroom(int idClassroom) {
-		logger.info("Attempting to remove classroom with ID: {}", idClassroom);
+	public void deleteClassroom(int idClassroom) {
+		logger.info("Attempting to delete classroom with ID: {}", idClassroom);
 		Optional<Classroom> foundClassroom = classroomRepository.findById(idClassroom);
 		if(foundClassroom.isEmpty()) {
             logger.warn("Classroom not found with ID: {}", idClassroom);
 			throw new NoSuchClassroomException("No such classroom or incorrect idClassroom");
 		}
 		classroomRepository.deleteById(idClassroom);
-        logger.info("Classroom removed successfully with ID: {}", idClassroom);
+        logger.info("Classroom deleted successfully with ID: {}", idClassroom);
 	}
 
 	@Override
@@ -87,9 +87,9 @@ public class ClassroomServiceImpl implements ClassroomService {
 
 		boolean isAdmin = roles.length > 1;
         if (isAdmin) {
-            logger.info("User {} is an admin.", username);
+            logger.debug("User {} is an admin.", username);
         } else {
-            logger.info("User {} is not an admin.", username);
+            logger.debug("User {} is not an admin.", username);
         }
         return isAdmin;
 	}
