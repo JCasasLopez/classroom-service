@@ -27,31 +27,42 @@ public class ClassroomServiceImpl implements ClassroomService {
 
 	@Override
 	public ClassroomDto createClassroom(ClassroomDto classroom) {
+		logger.info("Creating new classroom: Name= {}, ID= {}", classroom.getName(), classroom.getIdClassroom());
 		Classroom returnedClassroom = classroomRepository.save(
 				classroomMapper.classroomDtoToClassroom(classroom));
+		logger.info("Classroom created successfully: Name= {}, ID= {}", returnedClassroom.getName(), 
+				returnedClassroom.getIdClassroom());
 		return classroomMapper.classroomToClassroomDto(returnedClassroom);
 	}
 
 	@Override
 	public void removeClassroom(int idClassroom) {
+		logger.info("Attempting to remove classroom with ID: {}", idClassroom);
 		Optional<Classroom> foundClassroom = classroomRepository.findById(idClassroom);
 		if(foundClassroom.isEmpty()) {
+            logger.warn("Classroom not found with ID: {}", idClassroom);
 			throw new NoSuchClassroomException("No such classroom or incorrect idClassroom");
 		}
 		classroomRepository.deleteById(idClassroom);
+        logger.info("Classroom removed successfully with ID: {}", idClassroom);
 	}
 
 	@Override
 	public ClassroomDto updateClassroom(ClassroomDto classroom) {
+        logger.info("Updating classroom with ID: {}", classroom.getIdClassroom());
 		Optional<Classroom> foundClassroom = classroomRepository.findById(classroom.getIdClassroom());
 		if(foundClassroom.isEmpty()) {
+            logger.warn("Cannot update, classroom not found with ID: {}", classroom.getIdClassroom());
 			throw new NoSuchClassroomException("No such classroom or incorrect idClassroom");
 		}
-		return createClassroom(classroom);
+		ClassroomDto updatedClassroom = createClassroom(classroom);
+        logger.info("Classroom updated successfully: Name= {}, ID= {}", updatedClassroom.getName(),
+        		updatedClassroom.getIdClassroom());
+        return updatedClassroom;
 	}
 
 	@Override
-	public boolean isUserAdmin(String[] roles) {
+	public boolean isUserAdmin(String username, String[] roles) {
 		
 		/* Un filtro captura el token JWT usado para la autenticación de los usuarios a partir del 
 		   encabezado de la petición HTTP, extrae sus "claims" y al llamar a este método, manda el 
@@ -72,10 +83,15 @@ public class ClassroomServiceImpl implements ClassroomService {
 		   the user is upgraded to "admin", both roles are kept, hence if the array's length is 
 		   higher than 1, we know for certain that the user is an "admin". */
 		
-		if(roles.length > 1) {
-			return true;
-		}
-		return false;
+		logger.debug("Checking if user {} is admin", username);
+
+		boolean isAdmin = roles.length > 1;
+        if (isAdmin) {
+            logger.info("User {} is an admin.", username);
+        } else {
+            logger.info("User {} is not an admin.", username);
+        }
+        return isAdmin;
 	}
 	
 }
