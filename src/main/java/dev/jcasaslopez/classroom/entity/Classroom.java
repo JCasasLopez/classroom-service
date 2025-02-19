@@ -6,6 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name="classrooms")
@@ -13,10 +16,14 @@ public class Classroom {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idClassroom;
+	@NotBlank
 	@Column(unique = true)
 	private String name;
+	@Min(8)	
 	private int seats;
+	@NotNull
 	private boolean projector;
+	@NotNull
 	private boolean speakers;
 	
 	public Classroom(int idClassroom, String name, int seats, boolean projector, boolean speakers) {
