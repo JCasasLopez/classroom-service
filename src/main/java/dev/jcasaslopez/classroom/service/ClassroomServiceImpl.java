@@ -49,16 +49,17 @@ public class ClassroomServiceImpl implements ClassroomService {
 
 	@Override
 	public ClassroomDto updateClassroom(ClassroomDto classroom) {
-        logger.info("Updating classroom with ID: {}", classroom.getIdClassroom());
+		logger.info("Updating classroom with ID: {}", classroom.getIdClassroom());
 		Optional<Classroom> foundClassroom = classroomRepository.findById(classroom.getIdClassroom());
 		if(foundClassroom.isEmpty()) {
-            logger.warn("Cannot update, classroom not found with ID: {}", classroom.getIdClassroom());
+			logger.warn("Cannot update, classroom not found with ID: {}", classroom.getIdClassroom());
 			throw new NoSuchClassroomException("No such classroom or incorrect idClassroom");
 		}
-		ClassroomDto updatedClassroom = createClassroom(classroom);
-        logger.info("Classroom updated successfully: Name= {}, ID= {}", updatedClassroom.getName(),
-        		updatedClassroom.getIdClassroom());
-        return updatedClassroom;
+		Classroom updatedClassroom = classroomRepository.save(
+				classroomMapper.classroomDtoToClassroom(classroom));
+		logger.info("Classroom updated successfully: Name= {}, ID= {}", updatedClassroom.getName(),
+				updatedClassroom.getIdClassroom());
+		return classroomMapper.classroomToClassroomDto(updatedClassroom);
 	}
 
 }
