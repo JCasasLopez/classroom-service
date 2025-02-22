@@ -11,6 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import dev.jcasaslopez.classroom.enums.UserAuthenticationStatus;
 import dev.jcasaslopez.classroom.exception.FailedAuthenticatedException;
 import dev.jcasaslopez.classroom.exception.UserNoAdminException;
+import dev.jcasaslopez.classroom.util.StandardResponseHandler;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,9 +23,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 	private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
 
 	private final RestClient restClient;
+	private final StandardResponseHandler standardResponseHandler;
 
-	public AuthenticationFilter(RestClient restClient) {
+	public AuthenticationFilter(RestClient restClient, StandardResponseHandler standardResponseHandler) {
 		this.restClient = restClient;
+		this.standardResponseHandler = standardResponseHandler;
 	}
 
 	@Override
@@ -41,37 +44,38 @@ public class AuthenticationFilter extends OncePerRequestFilter {
           If the authentication is successful and the user is an "admin," the flow continues to the controllers.
 		 */
 		
-		logger.debug("Entering AuthenticationFilter...");
-        String baseUrl = "http://service-user/user/authenticateUser";
-		String token = request.getHeader("Authorization");
-		
-		/* Permitir un token especial solo para pruebas 
-		   ----------------------------------------------
-		   Allow a special token for testing */
-		if ("Bearer test-token".equals(token)) {
-			logger.info("Using test token for authentication");
-			filterChain.doFilter(request, response);
-			return;
-		}
-		
-		/* Evitamos hacer una llamada innecesaria al servicio users verificando aquí estas condiciones
-		   ------------------------------------------------------------------------------------------
-	       If these conditions are met, we can handle them here and avoid an unnecessary call to the "users" service */
-		if (token == null || !token.startsWith("Bearer ")) {
-			logger.warn("Token is missing or does not start with 'Bearer '");
-			throw new FailedAuthenticatedException("Invalid authentication token");
-		}
-		
-		UserAuthenticationStatus userAuthenticationStatus = restClient
-                .get()
-                .uri(baseUrl)
-                .header("Authorization", token)
-                .retrieve()
-                .body(UserAuthenticationStatus.class);
-		
-        logger.info("UserAuthenticationStatus received: {}", userAuthenticationStatus);
-		
-		switch (userAuthenticationStatus) {
+		try {
+			logger.debug("Entering AuthenticationFilter...");
+			String baseUrl = "http://service-user/user/authenticateUser";
+			String token = request.getHeader("Authorization");
+
+			/* Permitir un token especial solo para pruebas 
+			   ----------------------------------------------
+			   Allow a special token for testing */
+			if ("Bearer test-token".equals(token)) {
+				logger.info("Using test token for authentication");
+				filterChain.doFilter(request, response);
+				return;
+			}
+
+			/* Evitamos hacer una llamada innecesaria al servicio users verificando aquí estas condiciones
+			   ------------------------------------------------------------------------------------------
+		       If these conditions are met, we can handle them here and avoid an unnecessary call to the "users" service */
+			if (token == null || !token.startsWith("Bearer ")) {
+				logger.warn("Token is missing or does not start with 'Bearer '");
+				throw new FailedAuthenticatedException("Invalid authentication token");
+			}
+
+			UserAuthenticationStatus userAuthenticationStatus = restClient
+					.get()
+					.uri(baseUrl)
+					.header("Authorization", token)
+					.retrieve()
+					.body(UserAuthenticationStatus.class);
+
+			logger.info("UserAuthenticationStatus received: {}", userAuthenticationStatus);
+
+			switch (userAuthenticationStatus) {
 			case FAILED_AUTHENTICATION:
 				logger.warn("Invalid or expired token");
 				throw new FailedAuthenticatedException("Invalid or expired token");
@@ -84,7 +88,17 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 				break;
 			default:
 				logger.error("Unexpected authentication status: {}", userAuthenticationStatus);
-                throw new IllegalStateException("Unexpected value: " + userAuthenticationStatus);
+				throw new IllegalStateException("Unexpected value: " + userAuthenticationStatus);
+			}
+			
+		} catch (FailedAuthenticatedException ex) {
+			standardResponseHandler.handleResponse(response, 401, ex.getMessage(), null);
+			
+		} catch (UserNoAdminException ex) {
+			standardResponseHandler.handleResponse(response, 403, ex.getMessage(), null);
+			
+		} catch (IllegalStateException ex) {
+			standardResponseHandler.handleResponse(response, 500, ex.getMessage(), null);
 		}
 	}
 }
