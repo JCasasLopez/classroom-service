@@ -46,13 +46,17 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 		String token = request.getHeader("Authorization");
 		
 		/* Permitir un token especial solo para pruebas 
-		----------------------------------------------
-		Allow a special token for testing */
+		   ----------------------------------------------
+		   Allow a special token for testing */
 		if ("Bearer test-token".equals(token)) {
+			logger.info("Using test token for authentication");
 			filterChain.doFilter(request, response);
 			return;
 		}
 		
+		/* Evitamos hacer una llamada innecesaria al servicio users verificando aquí estas condiciones
+		   ------------------------------------------------------------------------------------------
+	       If these conditions are met, we can handle them here and avoid an unnecessary call to the "users" service */
 		if (token == null || !token.startsWith("Bearer ")) {
 			logger.warn("Token is missing or does not start with 'Bearer '");
 			throw new FailedAuthenticatedException("Invalid authentication token");
