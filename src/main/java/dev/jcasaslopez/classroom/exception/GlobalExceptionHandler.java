@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -31,6 +32,13 @@ public class GlobalExceptionHandler {
 		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
 				ex.getMessage() , null, HttpStatus.FORBIDDEN);
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+	}
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<StandardResponse> handleValidationException(MethodArgumentNotValidException ex){
+		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
+				"Missing or invalid fields" , null, HttpStatus.BAD_REQUEST);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
 }
