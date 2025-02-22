@@ -2,6 +2,7 @@ package dev.jcasaslopez.classroom.exception;
 
 import java.time.LocalDateTime;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -38,6 +39,13 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<StandardResponse> handleValidationException(MethodArgumentNotValidException ex){
 		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
 				"Missing or invalid fields" , null, HttpStatus.BAD_REQUEST);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	}
+	
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<StandardResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex){
+		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
+				"The database already contains a classroom with this name" , null, HttpStatus.BAD_REQUEST);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
