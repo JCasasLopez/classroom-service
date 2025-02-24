@@ -1,13 +1,33 @@
 package dev.jcasaslopez.classroom.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+// Se utilizan tipos envoltorios (Integer, Boolean) en lugar de primitivos, ya que los tipos 
+// primitivos no pueden ser null y Jackson asignaría automáticamente valores por defecto 
+// (por ejemplo, false para booleanos) al deserializar JSON. Esto impediría detectar campos 
+// ausentes y realizar validaciones como @NotNull correctamente.
+
+// Wrapper types (Integer, Boolean) are used instead of primitive types because primitives 
+// cannot be null, and Jackson would automatically assign default values (e.g., false for 
+// booleans) when deserializing JSON. This would prevent detecting missing fields and 
+// correctly performing validations such as @NotNull.
+
 public class ClassroomDto {
-	private int idClassroom;
-	private String name;
-	private int seats;
-	private boolean projector;
-	private boolean speakers;
 	
-	public ClassroomDto(int idClassroom, String name, int seats, boolean projector, boolean speakers) {
+	private int idClassroom;
+	@NotBlank
+	private String name;
+	@Min(8)	
+	private Integer seats;
+	@NotNull
+	private Boolean projector;
+	@NotNull
+	private Boolean speakers;
+	
+	public ClassroomDto(int idClassroom, @NotBlank String name, @Min(8) Integer seats, @NotNull Boolean projector,
+			@NotNull Boolean speakers) {
 		this.idClassroom = idClassroom;
 		this.name = name;
 		this.seats = seats;
@@ -35,27 +55,27 @@ public class ClassroomDto {
 		this.name = name;
 	}
 
-	public int getSeats() {
+	public Integer getSeats() {
 		return seats;
 	}
 
-	public void setSeats(int seats) {
+	public void setSeats(Integer seats) {
 		this.seats = seats;
 	}
 
-	public boolean isProjector() {
+	public Boolean getProjector() {
 		return projector;
 	}
 
-	public void setProjector(boolean projector) {
+	public void setProjector(Boolean projector) {
 		this.projector = projector;
 	}
 
-	public boolean isSpeakers() {
+	public Boolean getSpeakers() {
 		return speakers;
 	}
 
-	public void setSpeakers(boolean speakers) {
+	public void setSpeakers(Boolean speakers) {
 		this.speakers = speakers;
 	}
 	
