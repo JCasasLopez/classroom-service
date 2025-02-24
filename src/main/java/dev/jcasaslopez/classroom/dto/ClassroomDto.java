@@ -17,17 +17,17 @@ import jakarta.validation.constraints.NotNull;
 public class ClassroomDto {
 	
 	private int idClassroom;
-	@NotBlank
+	@NotBlank(message = "Classroom name is required")
 	private String name;
-	@Min(8)	
+	@NotNull(message = "Seats field is required")
+    @Min(value = 8, message = "Seats must be at least 8")
 	private Integer seats;
-	@NotNull
+	@NotNull(message = "Projector field is required")
 	private Boolean projector;
-	@NotNull
+	@NotNull(message = "Speakers field is required")
 	private Boolean speakers;
 	
-	public ClassroomDto(int idClassroom, @NotBlank String name, @Min(8) Integer seats, @NotNull Boolean projector,
-			@NotNull Boolean speakers) {
+	public ClassroomDto(int idClassroom, String name, Integer seats, Boolean projector, Boolean speakers) {
 		this.idClassroom = idClassroom;
 		this.name = name;
 		this.seats = seats;
