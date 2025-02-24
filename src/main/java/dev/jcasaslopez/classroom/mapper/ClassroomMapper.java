@@ -12,8 +12,8 @@ public class ClassroomMapper {
 		return new Classroom(classroom.getIdClassroom(),
 							classroom.getName(),
 							classroom.getSeats(),
-							classroom.isProjector(),
-							classroom.isSpeakers());
+							classroom.getProjector(),
+							classroom.getSpeakers());
 	}
 	
 	public ClassroomDto classroomToClassroomDto (Classroom classroom) {

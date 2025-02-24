@@ -54,8 +54,8 @@ class ClassroomServiceTest {
 		assertAll("Validate returned ClassroomDto properties",
 				() -> assertEquals(classroomDto.getName(), returnedClassroom.getName(), "Names should match"),
 				() -> assertEquals(classroomDto.getSeats(), returnedClassroom.getSeats(), "Number of seats should match"),
-				() -> assertEquals(classroomDto.isProjector(), returnedClassroom.isProjector(), "Projector status should match"),
-				() -> assertEquals(classroomDto.isSpeakers(), returnedClassroom.isSpeakers(), "Speakers status should match")
+				() -> assertEquals(classroomDto.getProjector(), returnedClassroom.getProjector(), "Projector status should match"),
+				() -> assertEquals(classroomDto.getSpeakers(), returnedClassroom.getSpeakers(), "Speakers status should match")
 				);
 
 		InOrder inOrder = inOrder(classroomMapper, classroomRepository);
@@ -116,8 +116,8 @@ class ClassroomServiceTest {
 		assertAll("Validate returned ClassroomDto properties",
 				() -> assertEquals(classroomDto.getName(), returnedClassroom.getName(), "Names should match"),
 				() -> assertEquals(classroomDto.getSeats(), returnedClassroom.getSeats(), "Number of seats should match"),
-				() -> assertEquals(classroomDto.isProjector(), returnedClassroom.isProjector(), "Projector status should match"),
-				() -> assertEquals(classroomDto.isSpeakers(), returnedClassroom.isSpeakers(), "Speakers status should match")
+				() -> assertEquals(classroomDto.getProjector(), returnedClassroom.getProjector(), "Projector status should match"),
+				() -> assertEquals(classroomDto.getSpeakers(), returnedClassroom.getSpeakers(), "Speakers status should match")
 				);
 
 		InOrder inOrder = inOrder(classroomRepository, classroomMapper);

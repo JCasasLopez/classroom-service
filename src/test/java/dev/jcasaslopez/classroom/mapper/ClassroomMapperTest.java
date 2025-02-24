@@ -40,8 +40,8 @@ public class ClassroomMapperTest {
 				() -> assertEquals(classroomDto.getIdClassroom(), mappedClassroom.getIdClassroom(), "IDs should match"),
 				() -> assertEquals(classroomDto.getName(), mappedClassroom.getName(), "Names should match"),
 				() -> assertEquals(classroomDto.getSeats(), mappedClassroom.getSeats(), "Number of seats should match"),
-				() -> assertEquals(classroomDto.isProjector(), mappedClassroom.isProjector(), "Projector status should match"),
-				() -> assertEquals(classroomDto.isSpeakers(), mappedClassroom.isSpeakers(), "Speakers status should match")
+				() -> assertEquals(classroomDto.getProjector(), mappedClassroom.isProjector(), "Projector status should match"),
+				() -> assertEquals(classroomDto.getSpeakers(), mappedClassroom.isSpeakers(), "Speakers status should match")
 				);
 	}
 	
@@ -59,8 +59,8 @@ public class ClassroomMapperTest {
 				() -> assertEquals(classroom.getIdClassroom(), mappedClassroomDto.getIdClassroom(), "IDs should match"),
 				() -> assertEquals(classroom.getName(), mappedClassroomDto.getName(), "Names should match"),
 				() -> assertEquals(classroom.getSeats(), mappedClassroomDto.getSeats(), "Number of seats should match"),
-				() -> assertEquals(classroom.isProjector(), mappedClassroomDto.isProjector(), "Projector status should match"),
-				() -> assertEquals(classroom.isSpeakers(), mappedClassroomDto.isSpeakers(), "Speakers status should match")
+				() -> assertEquals(classroom.isProjector(), mappedClassroomDto.getProjector(), "Projector status should match"),
+				() -> assertEquals(classroom.isSpeakers(), mappedClassroomDto.getSpeakers(), "Speakers status should match")
 				);
 	}
 }
