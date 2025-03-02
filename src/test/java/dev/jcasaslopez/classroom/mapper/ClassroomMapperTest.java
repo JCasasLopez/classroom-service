@@ -13,11 +13,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import dev.jcasaslopez.classroom.dto.ClassroomDto;
 import dev.jcasaslopez.classroom.entity.Classroom;
 
-/* Estas anotaciones permiten evitar la carga completa del contexto con @SpringBootTest.  
-En su lugar, inicializamos solo ClassroomMapper y la configuración mínima necesaria.  
----------------------------------------------------------------------------------
-Instead of loading the full context with @SpringBootTest, we initialize only  
-ClassroomMapper and the minimal required configuration. */
+// Estas anotaciones permiten evitar la carga completa del contexto con @SpringBootTest.  
+// En su lugar, inicializamos solo ClassroomMapper y la configuración mínima necesaria.  
+
+// Instead of loading the full context with @SpringBootTest, we initialize only  
+// ClassroomMapper and the minimal required configuration.
 
 @ExtendWith(SpringExtension.class)
 @Import(ClassroomMapper.class)
