@@ -2,6 +2,7 @@ package dev.jcasaslopez.classroom.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.config.TopicConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
@@ -9,9 +10,12 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaProducerConfiguration {
 	
+	@Value("${spring.kafka.producer.topic-name}")
+	private String topicName;
+	
 	@Bean
     public NewTopic classroomsTopic() {
-        return TopicBuilder.name("classrooms-list")
+        return TopicBuilder.name(topicName)
                 .partitions(1)
                 .replicas(3) 
                 // Use log compaction: keep only the latest snapshot per classroom ID; intermediate state changes are not required
