@@ -31,5 +31,11 @@ public class ClassroomEventProducer {
 		kafkaTemplate.send(topicName, String.valueOf(classroom.getIdClassroom()), classroomEvent);
 		logger.info("Publish Classroom {}", classroom.getIdClassroom());
 	}
+	
+	// Sends a Tombstone (null payload) to trigger log compaction and notify consumers to delete the record locally.
+	public void sendTombstone(int idClassroom) {
+		kafkaTemplate.send(topicName, String.valueOf(idClassroom), null);
+		logger.info("Sending tombstone for Classroom {}", idClassroom);
+	}
 
 }
