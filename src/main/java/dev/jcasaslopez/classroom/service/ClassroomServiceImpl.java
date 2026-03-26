@@ -34,6 +34,7 @@ public class ClassroomServiceImpl implements ClassroomService {
 	public ClassroomDto createClassroom(ClassroomDto classroom) {
 		Classroom returnedClassroom = classroomRepository.save(classroomMapper.classroomDtoToClassroom(classroom));
 		logger.info("Classroom created successfully: Name= {}, ID= {}", returnedClassroom.getName(), returnedClassroom.getIdClassroom());
+		producer.publishClassroom(returnedClassroom);
 		return classroomMapper.classroomToClassroomDto(returnedClassroom);
 	}
 
@@ -46,6 +47,7 @@ public class ClassroomServiceImpl implements ClassroomService {
 		}
 		classroomRepository.deleteById(idClassroom);
         logger.info("Classroom deleted successfully with ID: {}", idClassroom);
+		producer.sendTombstone(idClassroom);
 	}
 
 	@Override
@@ -57,6 +59,7 @@ public class ClassroomServiceImpl implements ClassroomService {
 		}
 		Classroom updatedClassroom = classroomRepository.save(classroomMapper.classroomDtoToClassroom(classroom));
 		logger.info("Classroom updated successfully: Name= {}, ID= {}", updatedClassroom.getName(), updatedClassroom.getIdClassroom());
+		producer.publishClassroom(updatedClassroom);
 		return classroomMapper.classroomToClassroomDto(updatedClassroom);
 	}
 
