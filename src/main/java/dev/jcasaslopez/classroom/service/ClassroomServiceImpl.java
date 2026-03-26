@@ -59,6 +59,7 @@ public class ClassroomServiceImpl implements ClassroomService {
 	@Override
 	public List<ClassroomDto> findAll() {
 		List<Classroom> allClassrooms = classroomRepository.findAll();
+		logger.debug("Found {} classrooms", allClassrooms.size()); 
 		return allClassrooms.stream()
 					.map(c -> classroomMapper.classroomToClassroomDto(c))
 					.toList();
