@@ -10,4 +10,6 @@ public interface ClassroomService {
 	void deleteClassroom(int idClassroom);
 	ClassroomDto updateClassroom(ClassroomDto classroom);
 	List<ClassroomDto> findAll();
+	public void publishAllClassrooms();
+	
 }

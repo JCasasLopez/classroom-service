@@ -11,6 +11,7 @@ import dev.jcasaslopez.classroom.dto.ClassroomDto;
 import dev.jcasaslopez.classroom.entity.Classroom;
 import dev.jcasaslopez.classroom.exception.NoSuchClassroomException;
 import dev.jcasaslopez.classroom.mapper.ClassroomMapper;
+import dev.jcasaslopez.classroom.producer.ClassroomEventProducer;
 import dev.jcasaslopez.classroom.repository.ClassroomRepository;
 
 @Service
@@ -20,10 +21,13 @@ public class ClassroomServiceImpl implements ClassroomService {
 	
 	private final ClassroomRepository classroomRepository;
 	private final ClassroomMapper classroomMapper;
+	private final ClassroomEventProducer producer;
 	
-	public ClassroomServiceImpl(ClassroomRepository classroomRepository, ClassroomMapper classroomMapper) {
+	public ClassroomServiceImpl(ClassroomRepository classroomRepository, ClassroomMapper classroomMapper,
+			ClassroomEventProducer producer) {
 		this.classroomRepository = classroomRepository;
 		this.classroomMapper = classroomMapper;
+		this.producer = producer;
 	}
 
 	@Override
@@ -65,4 +69,14 @@ public class ClassroomServiceImpl implements ClassroomService {
 					.toList();
 	}
 	
+	@Override
+	// This method is triggered by CommandLineRunner upon microservice startup to ensure the initial state is synchronized with Kafka.
+	public void publishAllClassrooms() {
+		findAll().forEach(
+				classroom -> {
+					producer.publishClassroom(classroomMapper.classroomDtoToClassroom(classroom));
+				}
+				);	
+	}
+
 }
