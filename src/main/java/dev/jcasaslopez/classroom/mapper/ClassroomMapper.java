@@ -32,5 +32,13 @@ public class ClassroomMapper {
 				classroom.getProjector(),
 				classroom.getSpeakers());
 	}
+	
+	public ClassroomEvent classroomToClassroomEvent (Classroom classroom) {
+		return new ClassroomEvent(classroom.getIdClassroom(),
+				classroom.getName(),
+				classroom.getSeats(),
+				classroom.isProjector(),
+				classroom.isSpeakers());
+	}
 
 }
