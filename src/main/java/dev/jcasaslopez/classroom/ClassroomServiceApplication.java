@@ -1,5 +1,7 @@
 package dev.jcasaslopez.classroom;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +15,8 @@ import dev.jcasaslopez.classroom.producer.ClassroomEventProducer;
 public class ClassroomServiceApplication {
 	
 	@Autowired ClassroomEventProducer classroomEventProducer;
+	
+	private static final Logger logger = LoggerFactory.getLogger(ClassroomServiceApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(ClassroomServiceApplication.class, args);
@@ -28,7 +32,13 @@ public class ClassroomServiceApplication {
     @Bean
     CommandLineRunner init() {
         return args -> {
-        	classroomEventProducer.publishClassrooms();
+            logger.info("Starting initial classroom synchronization...");
+            try {
+                classroomEventProducer.publishAllClassrooms();
+                logger.info("Initial classroom synchronization completed successfully.");
+            } catch (Exception ex) {
+                logger.error("Failed to perform initial synchronization", ex);
+            }
         };
     }
 
