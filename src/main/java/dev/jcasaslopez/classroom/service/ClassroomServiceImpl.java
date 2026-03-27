@@ -73,7 +73,8 @@ public class ClassroomServiceImpl implements ClassroomService {
 	}
 	
 	@Override
-	// This method is triggered by CommandLineRunner upon microservice startup to ensure the initial state is synchronized with Kafka.
+	// This method is triggered by ClassroomStartupHandler upon microservice startup to ensure the initial state is 
+	// synchronized with Kafka.
 	public void publishAllClassrooms() {
 		findAll().forEach(
 				classroom -> {
