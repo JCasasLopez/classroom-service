@@ -45,8 +45,8 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<StandardResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex){
 		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
-				"The database already contains a classroom with this name" , null, HttpStatus.BAD_REQUEST);
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+				"The database already contains a classroom with this name" , null, HttpStatus.CONFLICT);
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 	}
 
 }
