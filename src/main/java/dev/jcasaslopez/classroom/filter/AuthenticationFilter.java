@@ -1,13 +1,17 @@
 package dev.jcasaslopez.classroom.filter;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import dev.jcasaslopez.classroom.service.AuthenticationService;
+import dev.jcasaslopez.classroom.shared.enums.RoleName;
+import dev.jcasaslopez.classroom.shared.enums.TokenType;
+import dev.jcasaslopez.classroom.shared.security.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,10 +22,12 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
-	private final AuthenticationService authService;
+	private final JwtService jwtService;
+	private final String base64SecretKey;
 
-	public AuthenticationFilter(AuthenticationService authService) {
-		this.authService = authService;
+	public AuthenticationFilter(JwtService jwtService, 	@Value("${jwt.secretKey}") String base64SecretKey) {
+		this.jwtService = jwtService;
+		this.base64SecretKey = base64SecretKey;
 	}
 
 	@Override
@@ -44,7 +50,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
 		// Exceptions thrown in a Filter are NOT caught by @RestControllerAdvice because Filters sit outside the Spring
 		// DispatcherServlet context, so we use response.sendError() to manually trigger a 401 Unauthorized response.
-		if(authService.validateToken(authHeader)) {
+		if(jwtService.validateJwt(authHeader, base64SecretKey, TokenType.ACCESS, List.of(RoleName.ROLE_ADMIN, RoleName.ROLE_SUPERADMIN))) {
 			filterChain.doFilter(request, response);
 		} else {
 			response.sendError(401, "Authentication failed");
