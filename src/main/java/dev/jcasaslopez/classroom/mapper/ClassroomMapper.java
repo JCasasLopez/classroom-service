@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import dev.jcasaslopez.classroom.dto.ClassroomDto;
 import dev.jcasaslopez.classroom.entity.Classroom;
-import dev.jcasaslopez.classroom.event.ClassroomEvent;
+import dev.jcasaslopez.classroom.shared.event.ClassroomEvent;
 
 @Component
 public class ClassroomMapper {

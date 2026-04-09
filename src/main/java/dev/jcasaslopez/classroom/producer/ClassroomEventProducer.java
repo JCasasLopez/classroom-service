@@ -7,7 +7,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import dev.jcasaslopez.classroom.entity.Classroom;
-import dev.jcasaslopez.classroom.event.ClassroomEvent;
+import dev.jcasaslopez.classroom.shared.event.ClassroomEvent;
 import dev.jcasaslopez.classroom.mapper.ClassroomMapper;
 
 @Component
