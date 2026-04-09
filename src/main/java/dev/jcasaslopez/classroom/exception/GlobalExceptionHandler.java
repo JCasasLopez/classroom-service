@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import dev.jcasaslopez.classroom.dto.StandardResponse;
+import dev.jcasaslopez.classroom.shared.exception.FailedAuthenticationException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
-	@ExceptionHandler(FailedAuthenticatedException.class)
-	public ResponseEntity<StandardResponse> handleFailedAuthenticatedException(FailedAuthenticatedException ex){
+	@ExceptionHandler(FailedAuthenticationException.class)
+	public ResponseEntity<StandardResponse> handleFailedAuthenticatedException(FailedAuthenticationException ex){
 		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
 				ex.getMessage() , null, HttpStatus.UNAUTHORIZED);
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
