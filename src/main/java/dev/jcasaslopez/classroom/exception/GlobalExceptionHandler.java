@@ -1,7 +1,5 @@
 package dev.jcasaslopez.classroom.exception;
 
-import java.time.LocalDateTime;
-
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,44 +7,33 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import dev.jcasaslopez.classroom.dto.StandardResponse;
-import dev.jcasaslopez.classroom.shared.exception.FailedAuthenticationException;
+import dev.jcasaslopez.classroom.shared.utility.StandardResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
-	@ExceptionHandler(FailedAuthenticationException.class)
-	public ResponseEntity<StandardResponse> handleFailedAuthenticatedException(FailedAuthenticationException ex){
-		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
-				ex.getMessage() , null, HttpStatus.UNAUTHORIZED);
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-	}
 	
 	@ExceptionHandler(NoSuchClassroomException.class)
-	public ResponseEntity<StandardResponse> handleNoSuchClassroomExceptionException(NoSuchClassroomException ex){
-		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
-				ex.getMessage() , null, HttpStatus.NOT_FOUND);
+	public ResponseEntity<StandardResponse<Void>> handleNoSuchClassroomExceptionException(NoSuchClassroomException ex){
+		StandardResponse<Void> response = new StandardResponse<> (ex.getMessage(), null, HttpStatus.NOT_FOUND);
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 	}
 	
 	@ExceptionHandler(UserNoAdminException.class)
-	public ResponseEntity<StandardResponse> handleUserNoAdminExceptionException(UserNoAdminException ex){
-		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
-				ex.getMessage() , null, HttpStatus.FORBIDDEN);
+	public ResponseEntity<StandardResponse<Void>> handleUserNoAdminExceptionException(UserNoAdminException ex){
+		StandardResponse<Void> response = new StandardResponse<> (ex.getMessage() , null, HttpStatus.FORBIDDEN);
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<StandardResponse> handleValidationException(MethodArgumentNotValidException ex){
-		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
-				"Missing or invalid fields" , null, HttpStatus.BAD_REQUEST);
+	public ResponseEntity<StandardResponse<Void>> handleValidationException(MethodArgumentNotValidException ex){
+		StandardResponse<Void> response = new StandardResponse<> ("Missing or invalid fields" , null, HttpStatus.BAD_REQUEST);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 	
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<StandardResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex){
-		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
-				"The database already contains a classroom with this name" , null, HttpStatus.CONFLICT);
+	public ResponseEntity<StandardResponse<Void>> handleDataIntegrityViolationException(DataIntegrityViolationException ex){
+		StandardResponse<Void> response = new StandardResponse<> ("The database already contains a classroom with this name" , null, HttpStatus.CONFLICT);
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 	}
 

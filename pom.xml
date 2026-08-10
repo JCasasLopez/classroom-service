@@ -26,9 +26,18 @@
 		<tag/>
 		<url/>
 	</scm>
+	
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+	
+	<repositories>
+    	<repository>
+        	<id>jitpack.io</id>
+        	<url>https://jitpack.io</url>
+    	</repository>
+	</repositories>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -55,11 +64,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
 		<dependency>
 		    <groupId>ch.qos.logback</groupId>
 		    <artifactId>logback-core</artifactId>
 		</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
 		<dependency>
 		    <groupId>ch.qos.logback</groupId>
@@ -92,11 +103,10 @@
 		    <scope>runtime</scope>
 		</dependency>
 		<dependency>
-		    <groupId>dev.jcasaslopez.classroom</groupId>
-		    <artifactId>classroom-shared-library</artifactId>
-		    <version>0.0.1-SNAPSHOT</version>
+			<groupId>com.github.jcasaslopez</groupId>
+			<artifactId>classroom-shared-library</artifactId>
+			<version>0.0.4</version>
 		</dependency>
-
 	</dependencies>
 	
 	<build>

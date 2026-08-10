@@ -1,7 +1,5 @@
 package dev.jcasaslopez.classroom.controller;
 
-import java.time.LocalDateTime;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.jcasaslopez.classroom.dto.ClassroomDto;
-import dev.jcasaslopez.classroom.dto.StandardResponse;
 import dev.jcasaslopez.classroom.service.ClassroomService;
+import dev.jcasaslopez.classroom.shared.utility.StandardResponse;
 import jakarta.validation.Valid;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = {"${frontend.url}"})
 @RestController
 public class ClassroomController {
 	
@@ -29,26 +27,23 @@ public class ClassroomController {
 	}
 
 	@PostMapping(value="/createClassroom", consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<StandardResponse> createClassroom(@Valid @RequestBody ClassroomDto classroom){
+	public ResponseEntity<StandardResponse<Void>> createClassroom(@Valid @RequestBody ClassroomDto classroom){
 		classroomService.createClassroom(classroom);
-		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
-				"Classroom created successfully", null, HttpStatus.CREATED);
+		StandardResponse<Void> response = new StandardResponse<> ("Classroom created successfully", null, HttpStatus.CREATED);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 	
 	@DeleteMapping(value="/deleteClassroom")
-	public ResponseEntity<StandardResponse> deleteClassroom(@RequestParam int idClassroom){
+	public ResponseEntity<StandardResponse<Void>> deleteClassroom(@RequestParam int idClassroom){
 		classroomService.deleteClassroom(idClassroom);
-		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
-				"Classroom deleted successfully", null, HttpStatus.OK);
+		StandardResponse<Void> response = new StandardResponse<> ("Classroom deleted successfully", null, HttpStatus.OK);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
 	@PutMapping(value="/updateClassroom", consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<StandardResponse> updateClassroom(@Valid @RequestBody ClassroomDto classroom){
+	public ResponseEntity<StandardResponse<Void>> updateClassroom(@Valid @RequestBody ClassroomDto classroom){
 		classroomService.updateClassroom(classroom);
-		StandardResponse response = new StandardResponse (LocalDateTime.now(), 
-				"Classroom updated successfully", null, HttpStatus.OK);
+		StandardResponse<Void> response = new StandardResponse<> ("Classroom updated successfully", null, HttpStatus.OK);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	

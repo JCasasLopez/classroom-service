@@ -19,15 +19,12 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.jcasaslopez.classroom.dto.ClassroomDto;
-import dev.jcasaslopez.classroom.dto.StandardResponse;
 import dev.jcasaslopez.classroom.service.ClassroomService;
-import dev.jcasaslopez.classroom.util.StandardResponseHandler;
-
-// @WebMvcTest carga automáticamente diversos componentes de la capa web (MVC), entre otros 
-// los filtros, por eso no hace falta mockearlos explícitamente.
+import dev.jcasaslopez.classroom.shared.utility.StandardResponse;
 
 // @WebMvcTest automatically loads various MVC web-layer components, including filters, 
 // so there's no need to explicitly mock them.
@@ -43,9 +40,6 @@ public class ClassroomControllerTest {
 	@MockitoBean
 	private ClassroomService classroomService;
 	
-	@MockitoBean
-	private StandardResponseHandler standardResponseHandler;
-
 	@Test
 	@DisplayName("201 CREATED when creating classroom successfully")
 	void createClassroom_ValidRequest_Status201() throws Exception {
@@ -60,14 +54,16 @@ public class ClassroomControllerTest {
 		//Act
 		MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 		String responseBodyAsString = mvcResult.getResponse().getContentAsString();
-		StandardResponse response = objectMapper.readValue(responseBodyAsString, 
-				StandardResponse.class);
+		StandardResponse<Void> response = objectMapper.readValue(
+			    responseBodyAsString,
+			    new TypeReference<StandardResponse<Void>>() {}
+			);
 		
 		//Assert
 		assertAll("Validate returned StandardResponse properties",
-		        () -> assertEquals(HttpStatus.CREATED, response.getStatus(), "HTTP status should match"),
-		        () -> assertEquals("Classroom created successfully", response.getMessage(), "Messages should match"),
-		        () -> assertNull(response.getDetails(), "Details should be null")
+		        () -> assertEquals(HttpStatus.CREATED, response.status(), "HTTP status should match"),
+		        () -> assertEquals("Classroom created successfully", response.message(), "Messages should match"),
+		        () -> assertNull(response.details(), "Details should be null")
 		    );
 		
 		verify(classroomService).createClassroom(Mockito.any(ClassroomDto.class));
@@ -86,14 +82,16 @@ public class ClassroomControllerTest {
 		//Act
 		MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 		String responseBodyAsString = mvcResult.getResponse().getContentAsString();
-		StandardResponse response = objectMapper.readValue(responseBodyAsString, 
-				StandardResponse.class);
+		StandardResponse<Void> response = objectMapper.readValue(
+			    responseBodyAsString,
+			    new TypeReference<StandardResponse<Void>>() {}
+			);
 		
 		//Assert
 		assertAll("Validate returned StandardResponse properties",
-		        () -> assertEquals(HttpStatus.BAD_REQUEST, response.getStatus(), "HTTP status should match"),
-		        () -> assertEquals("Missing or invalid fields", response.getMessage(), "Messages should match"),
-		        () -> assertNull(response.getDetails(), "Details should be null")
+		        () -> assertEquals(HttpStatus.BAD_REQUEST, response.status(), "HTTP status should match"),
+		        () -> assertEquals("Missing or invalid fields", response.message(), "Messages should match"),
+		        () -> assertNull(response.details(), "Details should be null")
 		    );
 		
 		verify(classroomService, never()).createClassroom(Mockito.any(ClassroomDto.class));
@@ -111,14 +109,16 @@ public class ClassroomControllerTest {
 		//Act
 		MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 		String responseBodyAsString = mvcResult.getResponse().getContentAsString();
-		StandardResponse response = objectMapper.readValue(responseBodyAsString, 
-				StandardResponse.class);
+		StandardResponse<Void> response = objectMapper.readValue(
+			    responseBodyAsString,
+			    new TypeReference<StandardResponse<Void>>() {}
+			);		
 		
 		//Assert
 		assertAll("Validate returned StandardResponse properties",
-		        () -> assertEquals(HttpStatus.OK, response.getStatus(), "HTTP status should match"),
-		        () -> assertEquals("Classroom deleted successfully", response.getMessage(), "Messages should match"),
-		        () -> assertNull(response.getDetails(), "Details should be null")
+		        () -> assertEquals(HttpStatus.OK, response.status(), "HTTP status should match"),
+		        () -> assertEquals("Classroom deleted successfully", response.message(), "Messages should match"),
+		        () -> assertNull(response.details(), "Details should be null")
 		    );
 		
 		verify(classroomService).deleteClassroom(idClasroom);
@@ -138,14 +138,16 @@ public class ClassroomControllerTest {
 		//Act
 		MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 		String responseBodyAsString = mvcResult.getResponse().getContentAsString();
-		StandardResponse response = objectMapper.readValue(responseBodyAsString, 
-				StandardResponse.class);
+		StandardResponse<Void> response = objectMapper.readValue(
+			    responseBodyAsString,
+			    new TypeReference<StandardResponse<Void>>() {}
+			);
 		
 		//Assert
 		assertAll("Validate returned StandardResponse properties",
-		        () -> assertEquals(HttpStatus.OK, response.getStatus(), "HTTP status should match"),
-		        () -> assertEquals("Classroom updated successfully", response.getMessage(), "Messages should match"),
-		        () -> assertNull(response.getDetails(), "Details should be null")
+		        () -> assertEquals(HttpStatus.OK, response.status(), "HTTP status should match"),
+		        () -> assertEquals("Classroom updated successfully", response.message(), "Messages should match"),
+		        () -> assertNull(response.details(), "Details should be null")
 		    );
 		
 		verify(classroomService).updateClassroom(Mockito.any(ClassroomDto.class));
@@ -164,14 +166,16 @@ public class ClassroomControllerTest {
 		//Act
 		MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 		String responseBodyAsString = mvcResult.getResponse().getContentAsString();
-		StandardResponse response = objectMapper.readValue(responseBodyAsString, 
-				StandardResponse.class);
+		StandardResponse<Void> response = objectMapper.readValue(
+			    responseBodyAsString,
+			    new TypeReference<StandardResponse<Void>>() {}
+			);
 		
 		//Assert
 		assertAll("Validate returned StandardResponse properties",
-		        () -> assertEquals(HttpStatus.BAD_REQUEST, response.getStatus(), "HTTP status should match"),
-		        () -> assertEquals("Missing or invalid fields", response.getMessage(), "Messages should match"),
-		        () -> assertNull(response.getDetails(), "Details should be null")
+		        () -> assertEquals(HttpStatus.BAD_REQUEST, response.status(), "HTTP status should match"),
+		        () -> assertEquals("Missing or invalid fields", response.message(), "Messages should match"),
+		        () -> assertNull(response.details(), "Details should be null")
 		    );
 		
 		verify(classroomService, never()).updateClassroom(Mockito.any(ClassroomDto.class));
