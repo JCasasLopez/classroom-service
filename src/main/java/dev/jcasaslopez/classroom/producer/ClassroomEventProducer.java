@@ -15,9 +15,7 @@ public class ClassroomEventProducer {
 	
 	@Value("${spring.kafka.producer.topic-name}")
 	private String topicName;
-	
 	private static final Logger logger = LoggerFactory.getLogger(ClassroomEventProducer.class);
-	
 	private final KafkaTemplate<String, ClassroomEvent> kafkaTemplate;
 	private final ClassroomMapper classroomMapper;
 
