@@ -11,6 +11,4 @@ public interface ClassroomService {
 	void deleteClassroom(int idClassroom);
 	ClassroomResponseDto updateClassroom(int idClassroom, ClassroomRequestDto classroom);
 	List<ClassroomResponseDto> findAll();
-	public void publishAllClassrooms();
-	
 }

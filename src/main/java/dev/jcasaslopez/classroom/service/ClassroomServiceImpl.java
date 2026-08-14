@@ -76,16 +76,5 @@ public class ClassroomServiceImpl implements ClassroomService {
 					.map(c -> mapper.entityToResponse(c))
 					.toList();
 	}
-	
-	@Override
-	// This method is triggered by ClassroomStartupHandler upon microservice startup to ensure the initial state is 
-	// synchronized with Kafka.
-	public void publishAllClassrooms() {
-		findAll().forEach(
-				classroom -> {
-					producer.publishClassroom(mapper.responseToClassroomEvent(classroom));
-				}
-				);	
-	}
 
 }
