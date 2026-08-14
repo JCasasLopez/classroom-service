@@ -7,7 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import dev.jcasaslopez.classroom.dto.ClassroomDto;
+import dev.jcasaslopez.classroom.dto.ClassroomRequestDto;
+import dev.jcasaslopez.classroom.dto.ClassroomResponseDto;
 import dev.jcasaslopez.classroom.entity.Classroom;
 import dev.jcasaslopez.classroom.exception.NoSuchClassroomException;
 import dev.jcasaslopez.classroom.mapper.ClassroomMapper;
@@ -20,22 +21,22 @@ public class ClassroomServiceImpl implements ClassroomService {
 	private static final Logger logger = LoggerFactory.getLogger(ClassroomServiceImpl.class);
 	
 	private final ClassroomRepository classroomRepository;
-	private final ClassroomMapper classroomMapper;
+	private final ClassroomMapper mapper;
 	private final ClassroomEventProducer producer;
 	
-	public ClassroomServiceImpl(ClassroomRepository classroomRepository, ClassroomMapper classroomMapper,
+	public ClassroomServiceImpl(ClassroomRepository classroomRepository, ClassroomMapper mapper,
 			ClassroomEventProducer producer) {
 		this.classroomRepository = classroomRepository;
-		this.classroomMapper = classroomMapper;
+		this.mapper = mapper;
 		this.producer = producer;
 	}
 
 	@Override
-	public ClassroomDto createClassroom(ClassroomDto classroom) {
-		Classroom returnedClassroom = classroomRepository.save(classroomMapper.classroomDtoToClassroom(classroom));
+	public ClassroomResponseDto createClassroom(ClassroomRequestDto classroom) {
+		Classroom returnedClassroom = classroomRepository.save(mapper.requestToEntity(classroom));
 		logger.info("Classroom created successfully: Name= {}, ID= {}", returnedClassroom.getName(), returnedClassroom.getIdClassroom());
-		producer.publishClassroom(returnedClassroom);
-		return classroomMapper.classroomToClassroomDto(returnedClassroom);
+		producer.publishClassroom(mapper.entityToClassroomEvent(returnedClassroom));
+		return mapper.entityToResponse(returnedClassroom);
 	}
 
 	@Override
@@ -51,24 +52,24 @@ public class ClassroomServiceImpl implements ClassroomService {
 	}
 
 	@Override
-	public ClassroomDto updateClassroom(ClassroomDto classroom) {
-		Optional<Classroom> foundClassroom = classroomRepository.findById(classroom.getIdClassroom());
+	public ClassroomResponseDto updateClassroom(int idClassroom, ClassroomRequestDto classroom) {
+		Optional<Classroom> foundClassroom = classroomRepository.findById(idClassroom);
 		if(foundClassroom.isEmpty()) {
-			logger.warn("Cannot update, classroom not found with ID: {}", classroom.getIdClassroom());
+			logger.warn("Cannot update, classroom not found with ID: {}", idClassroom);
 			throw new NoSuchClassroomException("No such classroom or incorrect idClassroom");
 		}
-		Classroom updatedClassroom = classroomRepository.save(classroomMapper.classroomDtoToClassroom(classroom));
+		Classroom updatedClassroom = classroomRepository.save(mapper.requestToEntity(classroom));
 		logger.info("Classroom updated successfully: Name= {}, ID= {}", updatedClassroom.getName(), updatedClassroom.getIdClassroom());
-		producer.publishClassroom(updatedClassroom);
-		return classroomMapper.classroomToClassroomDto(updatedClassroom);
+		producer.publishClassroom(mapper.entityToClassroomEvent(updatedClassroom));
+		return mapper.entityToResponse(updatedClassroom);
 	}
 
 	@Override
-	public List<ClassroomDto> findAll() {
+	public List<ClassroomResponseDto> findAll() {
 		List<Classroom> allClassrooms = classroomRepository.findAll();
 		logger.debug("Found {} classrooms", allClassrooms.size()); 
 		return allClassrooms.stream()
-					.map(c -> classroomMapper.classroomToClassroomDto(c))
+					.map(c -> mapper.entityToResponse(c))
 					.toList();
 	}
 	
@@ -78,7 +79,7 @@ public class ClassroomServiceImpl implements ClassroomService {
 	public void publishAllClassrooms() {
 		findAll().forEach(
 				classroom -> {
-					producer.publishClassroom(classroomMapper.classroomDtoToClassroom(classroom));
+					producer.publishClassroom(mapper.responseToClassroomEvent(classroom));
 				}
 				);	
 	}

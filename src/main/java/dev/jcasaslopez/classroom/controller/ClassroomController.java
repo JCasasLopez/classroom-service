@@ -3,9 +3,15 @@ package dev.jcasaslopez.classroom.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import dev.jcasaslopez.classroom.dto.ClassroomDto;
+import dev.jcasaslopez.classroom.dto.ClassroomRequestDto;
 import dev.jcasaslopez.classroom.service.ClassroomService;
 import dev.jcasaslopez.classroom.shared.utility.StandardResponse;
 import dev.jcasaslopez.classroom.util.ClassroomEndpoints;
@@ -22,15 +28,15 @@ public class ClassroomController {
     }
 
     @PostMapping(value = ClassroomEndpoints.CLASSROOMS, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StandardResponse<Void>> createClassroom(@Valid @RequestBody ClassroomDto classroom) {
+    public ResponseEntity<StandardResponse<Void>> createClassroom(@Valid @RequestBody ClassroomRequestDto classroom) {
         classroomService.createClassroom(classroom);
         StandardResponse<Void> response = new StandardResponse<>("Classroom created successfully", null, HttpStatus.CREATED);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping(value = ClassroomEndpoints.CLASSROOM_BY_ID, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StandardResponse<Void>> updateClassroom(@PathVariable int id, @Valid @RequestBody ClassroomDto classroom) {
-        classroomService.updateClassroom(classroom);
+    public ResponseEntity<StandardResponse<Void>> updateClassroom(@PathVariable int id, @Valid @RequestBody ClassroomRequestDto classroom) {
+        classroomService.updateClassroom(id, classroom);
         StandardResponse<Void> response = new StandardResponse<>("Classroom updated successfully", null, HttpStatus.OK);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import dev.jcasaslopez.classroom.entity.Classroom;
 import dev.jcasaslopez.classroom.shared.event.ClassroomEvent;
-import dev.jcasaslopez.classroom.mapper.ClassroomMapper;
 
 @Component
 public class ClassroomEventProducer {
@@ -17,17 +15,14 @@ public class ClassroomEventProducer {
 	private String topicName;
 	private static final Logger logger = LoggerFactory.getLogger(ClassroomEventProducer.class);
 	private final KafkaTemplate<String, ClassroomEvent> kafkaTemplate;
-	private final ClassroomMapper classroomMapper;
 
-	public ClassroomEventProducer(KafkaTemplate<String, ClassroomEvent> kafkaTemplate, ClassroomMapper classroomMapper) {
+	public ClassroomEventProducer(KafkaTemplate<String, ClassroomEvent> kafkaTemplate) {
 		this.kafkaTemplate = kafkaTemplate;
-		this.classroomMapper = classroomMapper;
 	}
 	
-	public void publishClassroom (Classroom classroom) {
-		ClassroomEvent classroomEvent = classroomMapper.classroomToClassroomEvent(classroom);
+	public void publishClassroom(ClassroomEvent classroom) {
 		try {
-			kafkaTemplate.send(topicName, String.valueOf(classroom.getIdClassroom()), classroomEvent).join();
+			kafkaTemplate.send(topicName, String.valueOf(classroom.getIdClassroom()), classroom).join();
 			logger.info("Publish Classroom {}", classroom.getIdClassroom());
 		} catch (Exception ex) {
 		    throw new RuntimeException("Error sending Kafka message to topic: " + topicName, ex);

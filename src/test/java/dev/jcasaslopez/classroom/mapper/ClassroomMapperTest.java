@@ -5,62 +5,89 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import dev.jcasaslopez.classroom.dto.ClassroomDto;
+import dev.jcasaslopez.classroom.dto.ClassroomRequestDto;
+import dev.jcasaslopez.classroom.dto.ClassroomResponseDto;
 import dev.jcasaslopez.classroom.entity.Classroom;
+import dev.jcasaslopez.classroom.shared.event.ClassroomEvent;
 
-// Estas anotaciones permiten evitar la carga completa del contexto con @SpringBootTest.  
-// En su lugar, inicializamos solo ClassroomMapper y la configuración mínima necesaria.  
+class ClassroomMapperTest {
 
-// Instead of loading the full context with @SpringBootTest, we initialize only  
-// ClassroomMapper and the minimal required configuration.
+    private final ClassroomMapper classroomMapper = new ClassroomMapper();
 
-@ExtendWith(SpringExtension.class)
-@Import(ClassroomMapper.class)
-public class ClassroomMapperTest {
-	
-	@Autowired
-	private ClassroomMapper classroomMapper;
-	
-	@Test
-	@DisplayName("ClassroomDto to Classroom mapped successfully")
-	void classroomDtoToClassroom_ClassroomDtoMappedSuccessfully() {
-		// Arrange
-		ClassroomDto classroomDto = new ClassroomDto (1, "Classroom A", 20, true, true);
-		
-		// Act
-		Classroom mappedClassroom = classroomMapper.classroomDtoToClassroom(classroomDto);
-		
-		// Assert
-		assertAll("Validate mapped Classroom properties",
-				() -> assertEquals(classroomDto.getIdClassroom(), mappedClassroom.getIdClassroom(), "IDs should match"),
-				() -> assertEquals(classroomDto.getName(), mappedClassroom.getName(), "Names should match"),
-				() -> assertEquals(classroomDto.getSeats(), mappedClassroom.getSeats(), "Number of seats should match"),
-				() -> assertEquals(classroomDto.getProjector(), mappedClassroom.isProjector(), "Projector status should match"),
-				() -> assertEquals(classroomDto.getSpeakers(), mappedClassroom.isSpeakers(), "Speakers status should match")
-				);
-	}
-	
-	@Test
-	@DisplayName("Classroom to ClassroomDto mapped successfully")
-	void classroomToClassroomDto_ClassroomMappedSuccessfully() {
-		// Arrange
-		Classroom classroom = new Classroom (1, "Classroom A", 20, true, true);
-		
-		// Act
-		ClassroomDto mappedClassroomDto = classroomMapper.classroomToClassroomDto(classroom);
-		
-		// Assert
-		assertAll("Validate mapped ClassroomDto properties",
-				() -> assertEquals(classroom.getIdClassroom(), mappedClassroomDto.getIdClassroom(), "IDs should match"),
-				() -> assertEquals(classroom.getName(), mappedClassroomDto.getName(), "Names should match"),
-				() -> assertEquals(classroom.getSeats(), mappedClassroomDto.getSeats(), "Number of seats should match"),
-				() -> assertEquals(classroom.isProjector(), mappedClassroomDto.getProjector(), "Projector status should match"),
-				() -> assertEquals(classroom.isSpeakers(), mappedClassroomDto.getSpeakers(), "Speakers status should match")
-				);
-	}
+    @Test
+    @DisplayName("ClassroomRequestDto to Classroom mapped successfully")
+    void requestToEntity_MappedSuccessfully() {
+        // Arrange
+        ClassroomRequestDto request = new ClassroomRequestDto("Classroom A", 20, true, true);
+
+        // Act
+        Classroom mappedClassroom = classroomMapper.requestToEntity(request);
+
+        // Assert
+        assertAll("Validate mapped Classroom properties",
+                () -> assertEquals(0, mappedClassroom.getIdClassroom(), "ID should be forced to 0 on creation"),
+                () -> assertEquals(request.name(), mappedClassroom.getName(), "Names should match"),
+                () -> assertEquals(request.seats(), mappedClassroom.getSeats(), "Number of seats should match"),
+                () -> assertEquals(request.projector(), mappedClassroom.isProjector(), "Projector status should match"),
+                () -> assertEquals(request.speakers(), mappedClassroom.isSpeakers(), "Speakers status should match")
+        );
+    }
+
+    @Test
+    @DisplayName("Classroom to ClassroomResponseDto mapped successfully")
+    void entityToResponse_MappedSuccessfully() {
+        // Arrange
+        Classroom classroom = new Classroom(1, "Classroom A", 20, true, true);
+
+        // Act
+        ClassroomResponseDto mappedResponse = classroomMapper.entityToResponse(classroom);
+
+        // Assert
+        assertAll("Validate mapped ClassroomResponseDto properties",
+                () -> assertEquals(classroom.getIdClassroom(), mappedResponse.idClassroom(), "IDs should match"),
+                () -> assertEquals(classroom.getName(), mappedResponse.name(), "Names should match"),
+                () -> assertEquals(classroom.getSeats(), mappedResponse.seats(), "Number of seats should match"),
+                () -> assertEquals(classroom.isProjector(), mappedResponse.projector(), "Projector status should match"),
+                () -> assertEquals(classroom.isSpeakers(), mappedResponse.speakers(), "Speakers status should match")
+        );
+    }
+
+    @Test
+    @DisplayName("ClassroomResponseDto to ClassroomEvent mapped successfully")
+    void responseToClassroomEvent_MappedSuccessfully() {
+        // Arrange
+        ClassroomResponseDto response = new ClassroomResponseDto(1, "Classroom A", 20, true, true);
+
+        // Act
+        ClassroomEvent mappedEvent = classroomMapper.responseToClassroomEvent(response);
+
+        // Assert
+        assertAll("Validate mapped ClassroomEvent properties",
+                () -> assertEquals(response.idClassroom(), mappedEvent.getIdClassroom(), "IDs should match"),
+                () -> assertEquals(response.name(), mappedEvent.getName(), "Names should match"),
+                () -> assertEquals(response.seats(), mappedEvent.getSeats(), "Number of seats should match"),
+                () -> assertEquals(response.projector(), mappedEvent.getProjector(), "Projector status should match"),
+                () -> assertEquals(response.speakers(), mappedEvent.getSpeakers(), "Speakers status should match")
+        );
+    }
+
+    @Test
+    @DisplayName("Classroom to ClassroomEvent mapped successfully")
+    void entityToClassroomEvent_MappedSuccessfully() {
+        // Arrange
+        Classroom classroom = new Classroom(1, "Classroom A", 20, true, true);
+
+        // Act
+        ClassroomEvent mappedEvent = classroomMapper.entityToClassroomEvent(classroom);
+
+        // Assert
+        assertAll("Validate mapped ClassroomEvent properties",
+                () -> assertEquals(classroom.getIdClassroom(), mappedEvent.getIdClassroom(), "IDs should match"),
+                () -> assertEquals(classroom.getName(), mappedEvent.getName(), "Names should match"),
+                () -> assertEquals(classroom.getSeats(), mappedEvent.getSeats(), "Number of seats should match"),
+                () -> assertEquals(classroom.isProjector(), mappedEvent.getProjector(), "Projector status should match"),
+                () -> assertEquals(classroom.isSpeakers(), mappedEvent.getProjector(), "Speakers status should match")
+        );
+    }
 }
