@@ -44,7 +44,7 @@ public class ClassroomServiceImpl implements ClassroomService {
 		Optional<Classroom> foundClassroom = classroomRepository.findById(idClassroom);
 		if(foundClassroom.isEmpty()) {
             logger.warn("Classroom not found with ID: {}", idClassroom);
-			throw new NoSuchClassroomException("No such classroom or incorrect idClassroom");
+			throw new NoSuchClassroomException("Classroom not found in the database");
 		}
 		classroomRepository.deleteById(idClassroom);
         logger.info("Classroom deleted successfully with ID: {}", idClassroom);
@@ -53,12 +53,16 @@ public class ClassroomServiceImpl implements ClassroomService {
 
 	@Override
 	public ClassroomResponseDto updateClassroom(int idClassroom, ClassroomRequestDto classroom) {
-		Optional<Classroom> foundClassroom = classroomRepository.findById(idClassroom);
-		if(foundClassroom.isEmpty()) {
-			logger.warn("Cannot update, classroom not found with ID: {}", idClassroom);
-			throw new NoSuchClassroomException("No such classroom or incorrect idClassroom");
-		}
-		Classroom updatedClassroom = classroomRepository.save(mapper.requestToEntity(classroom));
+		classroomRepository.findById(idClassroom)
+		        .orElseThrow(() -> {
+		            logger.warn("Cannot update, classroom not found with ID: {}", idClassroom);
+		            return new NoSuchClassroomException("Classroom not found in the database");
+		        });
+		
+		Classroom classroomToUpdate = mapper.requestToEntity(classroom);
+		classroomToUpdate.setIdClassroom(idClassroom);
+		Classroom updatedClassroom = classroomRepository.save(classroomToUpdate);
+
 		logger.info("Classroom updated successfully: Name= {}, ID= {}", updatedClassroom.getName(), updatedClassroom.getIdClassroom());
 		producer.publishClassroom(mapper.entityToClassroomEvent(updatedClassroom));
 		return mapper.entityToResponse(updatedClassroom);
