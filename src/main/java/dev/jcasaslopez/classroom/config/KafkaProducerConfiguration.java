@@ -12,35 +12,28 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaProducerConfiguration {
 	
-	@Value("${spring.kafka.producer.topic-name}")
-	private String topicName;
+	@Value("${spring.kafka.producer.topic-name}") private String topicName;
+	@Value("${spring.kafka.producer.topic-number-replicas}") private  int numberReplicas;
+	@Value("${spring.kafka.producer.topic-number-in-sync-replicas}") private  int numberInSyncReplicas;
 	
-	private static final Logger logger = LoggerFactory.getLogger(KafkaProducerConfiguration.class);
-	private final int numberPartitions = 1;
-	private final int numberReplicas = 1;
+	// Each message takes up roughly 160 bytes
+	private static final int SEGMENT_SIZE = 1_048_576;
+	// This is constant. As classrooms volume will be low and there is no need for parallel processing, can be set to 1.
+	private static final int NUMBER_PARTITIONS = 1;
+	private static final double DIRTY_RATIO = 0.1;
 
-	
+	private static final Logger logger = LoggerFactory.getLogger(KafkaProducerConfiguration.class);
+		
 	@Bean
     NewTopic classroomsTopic() {
-		logger.info("Configuring Kafka Topic: {} with {} partitions and {} replicas", topicName, numberPartitions, numberReplicas);
+		logger.info("Configuring Kafka Topic: {} with {} partitions and {} replicas", topicName, NUMBER_PARTITIONS, numberReplicas);
         return TopicBuilder.name(topicName)
-                .partitions(numberPartitions)
+                .partitions(NUMBER_PARTITIONS)
                 .replicas(numberReplicas) 
-                
-                // Use log compaction: keep only the latest snapshot per classroom ID; intermediate state changes are not required
-                .config(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT)
-                
-                // Max size of a single segment before Kafka starts a new one. Remember that Kafka does not compact a segment
-                // until has been close.
-                // 50KB which is enough for roughly 256 messages (Classroom JSON as payload).
-                .config(TopicConfig.SEGMENT_BYTES_CONFIG, "51200") 
-                
-                // Percentage of "updated/old" data allowed before Kafka starts the cleaning process.
-                .config(TopicConfig.MIN_CLEANABLE_DIRTY_RATIO_CONFIG, "0.1")
-                
-                // How long Kafka keeps the deleted messages so consumers can see them.
-                .config(TopicConfig.DELETE_RETENTION_MS_CONFIG, "86400000")
-                .config(TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG, "1")
+                .config(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT)                
+                .config(TopicConfig.SEGMENT_BYTES_CONFIG, String.valueOf(SEGMENT_SIZE))   
+                .config(TopicConfig.MIN_CLEANABLE_DIRTY_RATIO_CONFIG, String.valueOf(DIRTY_RATIO))
+                .config(TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG, String.valueOf(numberInSyncReplicas))
                 .build();
     }
 
