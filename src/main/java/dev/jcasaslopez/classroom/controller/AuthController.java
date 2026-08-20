@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.jcasaslopez.classroom.shared.security.GenerateJwt;
@@ -23,11 +22,11 @@ public class AuthController {
 
 	
 	@GetMapping(value = ClassroomEndpoints.GENERATE_TOKEN)
-	public ResponseEntity<StandardResponse<String>> generateToken(@RequestParam(defaultValue = "1") int idUser) {
-		logger.debug("GET /generate-token?idUser={}", idUser);
+	public ResponseEntity<StandardResponse<String>> generateToken() {
+		logger.debug("GET /generate-token");
 
-		String message = String.format("JWT created successfully for user ID %s", idUser);
-		String jwt = new GenerateJwt(secretKey).withIdUser(idUser).withRoleAdmin().build();
+		String message = String.format("JWT created successfully");
+		String jwt = new GenerateJwt(secretKey).withRoleAdmin().build();
 		StandardResponse<String> response = new StandardResponse<>(message, jwt, HttpStatus.OK);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
