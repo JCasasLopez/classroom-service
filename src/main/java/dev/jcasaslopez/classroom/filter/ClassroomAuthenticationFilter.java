@@ -1,11 +1,13 @@
 package dev.jcasaslopez.classroom.filter;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import dev.jcasaslopez.classroom.shared.domain.UserInfo;
+
+import dev.jcasaslopez.classroom.shared.domain.AuthResponse;
+import dev.jcasaslopez.classroom.shared.enums.RoleName;
 import dev.jcasaslopez.classroom.shared.enums.TokenType;
 import dev.jcasaslopez.classroom.shared.filter.AuthenticationFilterBase;
 import dev.jcasaslopez.classroom.shared.security.JwtService;
@@ -32,8 +34,8 @@ public class ClassroomAuthenticationFilter extends AuthenticationFilterBase {
 	    }
 
 	    @Override
-	    protected Optional<UserInfo> validateToken(String authHeader) {
-	        return jwtService.validateJwt(authHeader, base64SecretKey, TokenType.ACCESS);
+	    protected AuthResponse validateToken(String authHeader) {
+	        return jwtService.validateJwt(authHeader, base64SecretKey, TokenType.ACCESS, List.of(RoleName.ROLE_ADMIN));
 	    }
 
 }
