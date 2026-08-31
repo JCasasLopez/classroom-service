@@ -46,7 +46,7 @@ import dev.jcasaslopez.classroom.util.ClassroomEndpoints;
 	    )
 	)
 
-public class ClassroomControllerWebTest {
+public class ControllerWebTest {
 	
 	@Autowired private MockMvc mockMvc;
 	@Autowired private ObjectMapper objectMapper;
