@@ -23,7 +23,7 @@ import dev.jcasaslopez.classroom.util.ClassroomEndpoints;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ExtendWith(MockitoExtension.class)
-class ClassroomAuthenticationFilterUnitTest {
+class AuthFilterUnitTest {
 
 	@Mock JwtService jwtService;
 	@Mock HttpServletRequest request;
@@ -60,7 +60,7 @@ class ClassroomAuthenticationFilterUnitTest {
 	}
 
 	@Test
-	void validateToken_delegates_with_ACCESS_type_and_ADMIN_role() {
+	void validateToken_uses_Access_TokenType_and_AdminRole() {
 	    // Arrange
 	    String authHeader = "Bearer valid-token";
 
