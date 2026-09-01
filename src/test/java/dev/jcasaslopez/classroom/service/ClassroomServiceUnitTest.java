@@ -41,7 +41,6 @@ public class ClassroomServiceUnitTest {
 	@Test
 	void delete_classroom_throws_exception_and_does_not_publish_when_classroom_not_found() {
 		// Arrange
-		
 		when(repository.findById(ID_CLASSROOM)).thenReturn(Optional.empty());
 		
 		// Act & Assert
@@ -52,6 +51,7 @@ public class ClassroomServiceUnitTest {
 	@Test
 	void update_classroom_throws_exception_and_does_not_publish_when_classroom_not_found() {
 		// Arrange
+		when(repository.findById(ID_CLASSROOM)).thenReturn(Optional.empty());
 
 		// Act & Assert
 		assertThrows(NoSuchClassroomException.class, () -> service.updateClassroom(ID_CLASSROOM, CLASSROOM_REQUEST));
