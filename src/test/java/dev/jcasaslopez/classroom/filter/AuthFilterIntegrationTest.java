@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import dev.jcasaslopez.classroom.base.BaseIntegrationTest;
 import dev.jcasaslopez.classroom.util.ClassroomEndpoints;
 
 // Even though the authentication filter has already been tested comprehensively through unit tests (both in this 
@@ -21,8 +21,7 @@ import dev.jcasaslopez.classroom.util.ClassroomEndpoints;
 // most importantly, there is no need to spin up the database with Testcontainers, as there is no interaction
 // with it, speeding up the test.
 
-@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AuthFilterIntegrationTest {
+public class AuthFilterIntegrationTest extends BaseIntegrationTest {
 	
 	@Autowired TestRestTemplate testRestTemplate; 
 	private static final String invalidToken = "Invalid token";
