@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS classrooms (
+    idClassroom INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(15) UNIQUE NOT NULL,
+    seats INT NOT NULL,
+    projector BOOLEAN NOT NULL,
+    speakers BOOLEAN NOT NULL
+);
