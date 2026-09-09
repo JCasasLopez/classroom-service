@@ -51,6 +51,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      kafka:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/classrooms?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=${DB_ROOT_USERNAME}
@@ -61,4 +63,5 @@ services:
       - FRONTEND_URL=${FRONTEND_URL}
       - KAFKA_NUMBER_REPLICAS=${KAFKA_NUMBER_REPLICAS}
       - KAFKA_NUMBER_IN_SYNC_REPLICAS=${KAFKA_NUMBER_IN_SYNC_REPLICAS}
+      - SPRING.KAFKA.PRODUCER.CLASSROOM.CRON=${SPRING_KAFKA_PRODUCER_CLASSROOM_CRON}
     entrypoint: ["sh", "-c", "echo 'Waiting for MySQL...' && sleep 5 && java -jar app.jar"]

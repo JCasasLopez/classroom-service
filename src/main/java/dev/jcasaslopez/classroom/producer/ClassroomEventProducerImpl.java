@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import dev.jcasaslopez.classroom.mapper.ClassroomMapper;
@@ -12,10 +13,11 @@ import dev.jcasaslopez.classroom.shared.event.ClassroomEvent;
 
 @Service
 public class ClassroomEventProducerImpl implements ClassroomEventProducer {
-
-    @Value("${spring.kafka.producer.topic-name}")
-    private String topicName;
+	
     private static final Logger logger = LoggerFactory.getLogger(ClassroomEventProducerImpl.class);
+
+    @Value("${spring.kafka.producer.topic-name}") private String topicName;
+    
     private final ClassroomRepository classroomRepository;
     private final ClassroomMapper mapper;
     private final KafkaTemplate<String, ClassroomEvent> kafkaTemplate;
@@ -57,5 +59,11 @@ public class ClassroomEventProducerImpl implements ClassroomEventProducer {
 		}
 		
 	}
+	
+	@Scheduled(fixedRateString = "${spring.kafka.producer.classroom.cron}") 
+    public void schedulePublishAllClassrooms() {
+        logger.info("Iniciando publicación programada de todas las aulas...");
+        publishAllClassrooms();
+    }
 
 }
