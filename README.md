@@ -15,6 +15,7 @@ The entire Classrooms application is deployed and available at [www.book-your-cl
 - [Exploring the Classroom Microservice](#exploring-the-classroom-microservice)
 - [Swagger](#swagger)
 - [Contribution and License](#contribution-and-license)
+- [Contact](#contact)
 
 ## Purpose
 
