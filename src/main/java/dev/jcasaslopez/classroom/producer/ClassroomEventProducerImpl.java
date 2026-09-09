@@ -41,8 +41,8 @@ public class ClassroomEventProducerImpl implements ClassroomEventProducer {
 	@Override
 	public void publishClassroom(ClassroomEvent classroom) {
 		try {
-			kafkaTemplate.send(topicName, String.valueOf(classroom.getIdClassroom()), classroom).join();
-			logger.info("Publish Classroom {}", classroom.getIdClassroom());
+			kafkaTemplate.send(topicName, String.valueOf(classroom.idClassroom()), classroom).join();
+			logger.info("Publish Classroom {}", classroom.idClassroom());
 		} catch (Exception ex) {
 		    throw new RuntimeException("Error sending Kafka message to topic: " + topicName, ex);
 		}

@@ -40,10 +40,10 @@ public class KafkaProducerIntegrationTest extends BaseIntegrationTest {
         ClassroomEvent classroom = records.get(0).value();
         
         assertAll(
-        		() -> assertEquals(CLASSROOM.name(), classroom.getName()),
-        		() -> assertEquals(CLASSROOM.seats(), classroom.getSeats()),
-        		() -> assertEquals(CLASSROOM.projector(), classroom.getProjector()),
-        		() -> assertEquals(CLASSROOM.speakers(), classroom.getSpeakers())
+        		() -> assertEquals(CLASSROOM.name(), classroom.name()),
+        		() -> assertEquals(CLASSROOM.seats(), classroom.seats()),
+        		() -> assertEquals(CLASSROOM.projector(), classroom.projector()),
+        		() -> assertEquals(CLASSROOM.speakers(), classroom.speakers())
         		);
 	}
 	
@@ -81,8 +81,8 @@ public class KafkaProducerIntegrationTest extends BaseIntegrationTest {
         ClassroomEvent classroom2 = records.get(1).value();
 
         assertAll(
-        		() -> assertEquals(CLASSROOM.name(), classroom.getName()),
-        		() -> assertEquals(CLASSROOM2.name(), classroom2.getName())
+        		() -> assertEquals(CLASSROOM.name(), classroom.name()),
+        		() -> assertEquals(CLASSROOM2.name(), classroom2.name())
         		);
 	}
 

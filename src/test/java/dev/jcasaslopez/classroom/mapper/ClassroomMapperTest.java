@@ -64,11 +64,11 @@ class ClassroomMapperTest {
 
         // Assert
         assertAll("Validate mapped ClassroomEvent properties",
-                () -> assertEquals(response.idClassroom(), mappedEvent.getIdClassroom(), "IDs should match"),
-                () -> assertEquals(response.name(), mappedEvent.getName(), "Names should match"),
-                () -> assertEquals(response.seats(), mappedEvent.getSeats(), "Number of seats should match"),
-                () -> assertEquals(response.projector(), mappedEvent.getProjector(), "Projector status should match"),
-                () -> assertEquals(response.speakers(), mappedEvent.getSpeakers(), "Speakers status should match")
+                () -> assertEquals(response.idClassroom(), mappedEvent.idClassroom(), "IDs should match"),
+                () -> assertEquals(response.name(), mappedEvent.name(), "Names should match"),
+                () -> assertEquals(response.seats(), mappedEvent.seats(), "Number of seats should match"),
+                () -> assertEquals(response.projector(), mappedEvent.projector(), "Projector status should match"),
+                () -> assertEquals(response.speakers(), mappedEvent.speakers(), "Speakers status should match")
         );
     }
 
@@ -83,11 +83,11 @@ class ClassroomMapperTest {
 
         // Assert
         assertAll("Validate mapped ClassroomEvent properties",
-                () -> assertEquals(classroom.getIdClassroom(), mappedEvent.getIdClassroom(), "IDs should match"),
-                () -> assertEquals(classroom.getName(), mappedEvent.getName(), "Names should match"),
-                () -> assertEquals(classroom.getSeats(), mappedEvent.getSeats(), "Number of seats should match"),
-                () -> assertEquals(classroom.isProjector(), mappedEvent.getProjector(), "Projector status should match"),
-                () -> assertEquals(classroom.isSpeakers(), mappedEvent.getProjector(), "Speakers status should match")
+                () -> assertEquals(classroom.getIdClassroom(), mappedEvent.idClassroom(), "IDs should match"),
+                () -> assertEquals(classroom.getName(), mappedEvent.name(), "Names should match"),
+                () -> assertEquals(classroom.getSeats(), mappedEvent.seats(), "Number of seats should match"),
+                () -> assertEquals(classroom.isProjector(), mappedEvent.projector(), "Projector status should match"),
+                () -> assertEquals(classroom.isSpeakers(), mappedEvent.speakers(), "Speakers status should match")
         );
     }
 }
