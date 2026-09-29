@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.jcasaslopez.classroom.dto.ClassroomRequestDto;
 import dev.jcasaslopez.classroom.dto.ClassroomResponseDto;
 import dev.jcasaslopez.classroom.service.ClassroomService;
-import dev.jcasaslopez.classroom.shared.utility.StandardResponse;
+import dev.jcasaslopez.classroom.shared.dto.StandardResponse;
 import dev.jcasaslopez.classroom.util.ClassroomEndpoints;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

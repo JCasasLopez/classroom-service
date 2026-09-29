@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 import dev.jcasaslopez.classroom.dto.ClassroomRequestDto;
 import dev.jcasaslopez.classroom.dto.ClassroomResponseDto;
-import dev.jcasaslopez.classroom.shared.utility.StandardResponse;
+import dev.jcasaslopez.classroom.shared.dto.StandardResponse;
 
 public class IntegrationTestHelper {
 

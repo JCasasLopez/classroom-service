@@ -7,7 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import dev.jcasaslopez.classroom.shared.utility.StandardResponse;
+import dev.jcasaslopez.classroom.shared.dto.StandardResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

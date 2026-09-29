@@ -16,7 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.jcasaslopez.classroom.shared.enums.RoleName;
-import dev.jcasaslopez.classroom.shared.enums.TokenType;
+import dev.jcasaslopez.classroom.shared.enums.TokenPurpose;
+import dev.jcasaslopez.classroom.shared.handler.StandardResponseHandler;
 import dev.jcasaslopez.classroom.shared.security.JwtService;
 import dev.jcasaslopez.classroom.shared.utility.PublicSwaggerPaths;
 import dev.jcasaslopez.classroom.util.ClassroomEndpoints;
@@ -26,6 +27,7 @@ import jakarta.servlet.http.HttpServletRequest;
 class AuthFilterUnitTest {
 
 	@Mock JwtService jwtService;
+	@Mock StandardResponseHandler standardResponseHandler;
 	@Mock HttpServletRequest request;
 
 	private static final String secretKey = "...";
@@ -33,7 +35,7 @@ class AuthFilterUnitTest {
 
 	@BeforeEach
 	void setUp() {
-		filter = new ClassroomAuthenticationFilter(jwtService, secretKey);
+		filter = new ClassroomAuthenticationFilter(jwtService, secretKey, standardResponseHandler);
 	}
 
 	@ParameterizedTest
@@ -68,6 +70,6 @@ class AuthFilterUnitTest {
 	    filter.validateToken(authHeader);
 
 	    // Assert
-	    verify(jwtService).validateJwt(authHeader, secretKey, TokenType.ACCESS, List.of(RoleName.ROLE_ADMIN));
+	    verify(jwtService).validateJwt(authHeader, secretKey, TokenPurpose.ACCESS, List.of(RoleName.ROLE_ADMIN));
 	}
 }

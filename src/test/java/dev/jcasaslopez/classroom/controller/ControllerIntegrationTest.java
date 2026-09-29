@@ -14,7 +14,7 @@ import dev.jcasaslopez.classroom.base.BaseIntegrationTest;
 import dev.jcasaslopez.classroom.dto.ClassroomRequestDto;
 import dev.jcasaslopez.classroom.dto.ClassroomResponseDto;
 import dev.jcasaslopez.classroom.entity.Classroom;
-import dev.jcasaslopez.classroom.shared.utility.StandardResponse;
+import dev.jcasaslopez.classroom.shared.dto.StandardResponse;
 import dev.jcasaslopez.classroom.util.IntegrationTestHelper;
 
 // Because of the different nature of HTTP responses (synchronous) and Kafka-topic writing (asynchronous),
