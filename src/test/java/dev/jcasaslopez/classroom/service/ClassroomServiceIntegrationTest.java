@@ -16,8 +16,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import dev.jcasaslopez.classroom.base.BaseRepositoryTest;
 import dev.jcasaslopez.classroom.dto.ClassroomRequestDto;
+import dev.jcasaslopez.classroom.kafka.producer.ClassroomEventProducer;
 import dev.jcasaslopez.classroom.mapper.ClassroomMapper;
-import dev.jcasaslopez.classroom.producer.ClassroomEventProducer;
 import dev.jcasaslopez.classroom.shared.event.ClassroomEvent;
 import jakarta.persistence.EntityManager;
 

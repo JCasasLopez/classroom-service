@@ -14,8 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.jcasaslopez.classroom.dto.ClassroomRequestDto;
 import dev.jcasaslopez.classroom.exception.NoSuchClassroomException;
+import dev.jcasaslopez.classroom.kafka.producer.ClassroomEventProducer;
 import dev.jcasaslopez.classroom.mapper.ClassroomMapper;
-import dev.jcasaslopez.classroom.producer.ClassroomEventProducer;
 import dev.jcasaslopez.classroom.repository.ClassroomRepository;
 
 // The happy path for each operation is covered by the E2E tests. Here we only cover the classroom not found 

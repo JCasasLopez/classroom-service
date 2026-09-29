@@ -1,4 +1,4 @@
-package dev.jcasaslopez.classroom.producer;
+package dev.jcasaslopez.classroom.kafka.producer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

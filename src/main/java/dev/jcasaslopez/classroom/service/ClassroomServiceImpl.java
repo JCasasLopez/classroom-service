@@ -11,8 +11,8 @@ import dev.jcasaslopez.classroom.dto.ClassroomRequestDto;
 import dev.jcasaslopez.classroom.dto.ClassroomResponseDto;
 import dev.jcasaslopez.classroom.entity.Classroom;
 import dev.jcasaslopez.classroom.exception.NoSuchClassroomException;
+import dev.jcasaslopez.classroom.kafka.producer.ClassroomEventProducer;
 import dev.jcasaslopez.classroom.mapper.ClassroomMapper;
-import dev.jcasaslopez.classroom.producer.ClassroomEventProducer;
 import dev.jcasaslopez.classroom.repository.ClassroomRepository;
 
 @Service

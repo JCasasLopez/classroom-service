@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
-public class KafkaProducerConfiguration {
+public class KafkaTopicConfiguration {
 	
 	@Value("${spring.kafka.producer.topic-name}") private String topicName;
 	@Value("${spring.kafka.producer.topic-number-replicas}") private  int numberReplicas;
@@ -22,7 +22,7 @@ public class KafkaProducerConfiguration {
 	private static final int NUMBER_PARTITIONS = 1;
 	private static final double DIRTY_RATIO = 0.1;
 
-	private static final Logger logger = LoggerFactory.getLogger(KafkaProducerConfiguration.class);
+	private static final Logger logger = LoggerFactory.getLogger(KafkaTopicConfiguration.class);
 		
 	@Bean
     NewTopic classroomsTopic() {

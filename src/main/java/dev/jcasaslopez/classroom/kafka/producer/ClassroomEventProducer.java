@@ -1,4 +1,4 @@
-package dev.jcasaslopez.classroom.producer;
+package dev.jcasaslopez.classroom.kafka.producer;
 
 import dev.jcasaslopez.classroom.shared.event.ClassroomEvent;
 
