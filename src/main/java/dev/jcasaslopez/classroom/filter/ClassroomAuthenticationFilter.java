@@ -3,7 +3,6 @@ package dev.jcasaslopez.classroom.filter;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +19,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @Component
 public class ClassroomAuthenticationFilter extends AuthenticationFilterBase {
 	
-	@Autowired StandardResponseHandler standardResponseHandler;
-
 	private static final Set<String> EXCLUDED_PATHS = Set.of(
 	        ClassroomEndpoints.GENERATE_TOKEN,
 	        PublicSwaggerPaths.SWAGGER_UI, PublicSwaggerPaths.API_DOCS
