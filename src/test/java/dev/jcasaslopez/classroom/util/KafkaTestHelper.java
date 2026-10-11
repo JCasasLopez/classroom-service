@@ -31,14 +31,22 @@ public final class KafkaTestHelper {
 		KafkaConsumer<String, ClassroomEvent> consumer = new KafkaConsumer<>(props);
 		consumer.subscribe(List.of(topic));
 		
-		// Partition assignment happens asynchronously after subscribe(), so we poll until it completes (or timeout) 
-		// before we can seek. seekToEnd() only schedules the seek; calling position() forces it to resolve immediately,
-		// so the consumer is positioned at the topic's current end, ignoring any events published by earlier tests.
+		// subscribe() does not assign partitions; the assignment happens inside poll(). So we poll in short intervals 
+		// (up to 100 ms each) until partitions are assigned, with a maximum wait of 5 seconds.
 		long deadline = System.currentTimeMillis() + 5000;
 		while (consumer.assignment().isEmpty() && System.currentTimeMillis() < deadline) {
 		    consumer.poll(Duration.ofMillis(100));
 		}
+		if (consumer.assignment().isEmpty()) {
+		    throw new IllegalStateException("Partitions not assigned within 5 seconds for topic " + topic);
+		}
+		
+		// A random group.id means a fresh group with no committed offsets. That alone does not skip records from earlier 
+		// tests, so we move to the end of each assigned partition to ignore them, keeping tests independent of each other.
 		consumer.seekToEnd(consumer.assignment());
+		
+		// seekToEnd() is lazy: the end offset is only resolved when it is first needed (position() or the next poll()). 
+		// Calling position() on each partition forces the resolution now, so the consumer is positioned before the test publishes anything.
 		consumer.assignment().forEach(consumer::position);
 		return consumer;
 		
