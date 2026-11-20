@@ -16,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.jcasaslopez.classroom.shared.enums.RoleName;
-import dev.jcasaslopez.classroom.shared.enums.TokenPurpose;
 import dev.jcasaslopez.classroom.shared.handler.StandardResponseHandler;
 import dev.jcasaslopez.classroom.shared.security.JwtService;
 import dev.jcasaslopez.classroom.shared.utility.PublicSwaggerPaths;
@@ -70,6 +69,6 @@ class AuthFilterUnitTest {
 	    filter.validateToken(authHeader);
 
 	    // Assert
-	    verify(jwtService).validateJwt(authHeader, secretKey, TokenPurpose.ACCESS, List.of(RoleName.ROLE_ADMIN));
+	    verify(jwtService).validateJwt(authHeader, secretKey, List.of(RoleName.ROLE_ADMIN));
 	}
 }
